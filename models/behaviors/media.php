@@ -121,7 +121,7 @@ class MediaBehavior extends ModelBehavior {
 	function beforeSave(&$Model) {
 		if (!$Model->exists()) {
 			if (!isset($Model->data[$Model->alias]['file'])) {
-				unset($Model->data[$Model->alias]);
+				//unset($Model->data[$Model->alias]);
 				return true;
 			}
 		} else {
@@ -185,12 +185,10 @@ class MediaBehavior extends ModelBehavior {
  */
 	function afterSave(&$Model, $created) {
 		extract($this->settings[$Model->alias]);
-
-		if (!$created || !$makeVersions) {
+		if (!$makeVersions) {
 			return true;
 		}
 		$item =& $Model->data[$Model->alias];
-
 		if (!isset($item['dirname'], $item['basename'])) {
 			return true;
 		}
@@ -297,14 +295,12 @@ class MediaBehavior extends ModelBehavior {
  */
 	function make(&$Model, $file, $overwrite = false) {
 		extract($this->settings[$Model->alias]);
-
 		list($file, $relativeFile) = $this->_file($Model, $file);
 
 		$relativeDirectory = DS . rtrim(dirname($relativeFile), '.');
 
 		$name = Medium::name($file);
 		$filter = Configure::read('Media.filter.' . strtolower($name));
-
 		$hasCallback = method_exists($Model, 'beforeMake');
 
 		foreach ($filter as $version => $instructions) {

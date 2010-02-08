@@ -253,7 +253,7 @@ class TransferBehavior extends ModelBehavior {
 		if (!$destinationFile = $this->_replaceMarker($Model, $destinationFile)) {
 			return false;
 		}
-
+		
 		if ($destination = $this->_destination($Model, $baseDirectory . $destinationFile)) {
 			$this->runtime[$Model->alias]['destination'] = $destination;
 		} else {
@@ -316,8 +316,12 @@ class TransferBehavior extends ModelBehavior {
  * @return mixed Array with parsed results on success, false on error
  */
 	function _destination(&$Model, $data) {
+		
 		extract($this->settings[$Model->alias]);
-
+		/* Removing exisiting file, to overwrite it */
+		if(file_exists($data)) {
+			unlink($data);
+		}
 		/* Destination file may not exist yet */
 		if (MediaValidation::file($data , false)) {
 			$original = $data;
