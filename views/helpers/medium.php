@@ -271,8 +271,14 @@ class MediumHelper extends AppHelper {
 				if (strpos($path, 'ico/') !== false) {
 					$attributes = $this->addClass($attributes, 'icon');
 				}
+				if(!isset($this->Html)) {
+					App::import("Helper", "Html");
+					$html = new HtmlHelper();
+				} else {
+					$html = $this->Html;
+				}
 				return sprintf(
-					$this->Html->tags['image'],
+					$html->tags['image'],
 					$url,
 					$this->_parseAttributes($attributes)
 				);
